@@ -6,72 +6,57 @@ public class GuessingApp {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
+        boolean restart;
 
-        int target = random.nextInt(100) + 1;
-        int maxAttempts = 7;
-        int attempts = 0;
-        boolean win = false;
+        System.out.println("==============================");
+        System.out.println("Welcome to the Guessing App");
+        System.out.println("==============================\n");
 
-        System.out.print("Enter player name: ");
-        String player = scanner.nextLine();
+        do {
+            // RESET GAME VARIABLES
+            int target = new Random().nextInt(100) + 1;
+            int attempts = 0;
+            int maxAttempts = 7;
+            boolean win = false;
 
-        System.out.println("\n Welcome to the Guessing App");
-        System.out.println("Guess a number between 1 and 100");
-        System.out.println("You have 7 attempts.\n");
+            System.out.println("Guess a number between 1 and 100");
+            System.out.println("You have 7 attempts.\n");
 
-        while (attempts < maxAttempts) {
+            // GAME LOOP
+            while (attempts < maxAttempts) {
 
-            System.out.print("Enter your guess: ");
-            String input = scanner.nextLine();
+                System.out.print("Enter your guess: ");
+                int guess = scanner.nextInt();
+                attempts++;
 
-            int guess;
-
-            try {
-                guess = validateInput(input);
-            } catch (InvalidInputException e) {
-                System.out.println(e.getMessage());
-                continue;
+                if (guess == target) {
+                    System.out.println("CORRECT 🎉");
+                    win = true;
+                    break;
+                } else if (guess > target) {
+                    System.out.println("HIGH\n");
+                } else {
+                    System.out.println("LOW\n");
+                }
             }
 
-            attempts++;
+            // FINAL SUMMARY
+            System.out.println("\n----- Game Summary -----");
+            System.out.println("Attempts used : " + attempts);
+            System.out.println("Result        : " + (win ? "WIN" : "LOSS"));
+            System.out.println("------------------------\n");
 
-            if (guess == target) {
-                System.out.println("CORRECT");
-                win = true;
-                break;
-            } else if (guess > target) {
-                System.out.println("HIGH\n");
-            } else {
-                System.out.println("LOW\n");
-            }
-        }
+            // CLEAR INPUT BUFFER
+            scanner.nextLine();
 
-        // Save result
-        StorageService.saveResult(player, attempts, win);
+            // RESTART / EXIT DECISION
+            restart = GameController.restartGame(scanner);
+            System.out.println();
 
-        System.out.println("\nGame result saved.");
+        } while (restart);
+
+        // CLEAN SHUTDOWN
         scanner.close();
-    }
-
-    // SIMPLE validation method
-    private static int validateInput(String input)
-            throws InvalidInputException {
-
-        try {
-            int value = Integer.parseInt(input);
-
-            if (value < 1 || value > 100) {
-                throw new InvalidInputException(
-                        "Number must be between 1 and 100"
-                );
-            }
-            return value;
-
-        } catch (NumberFormatException e) {
-            throw new InvalidInputException(
-                    "Please enter numbers only"
-            );
-        }
+        System.out.println("Thank you for playing. Goodbye!");
     }
 }
