@@ -1,35 +1,17 @@
-import java.util.Random;
 
 
-class GameConfig {
-    private final int MIN = 1;
-    private final int MAX = 100;
-    private final int MAX_ATTEMPTS = 7;
-    private final int MAX_HINTS = 3;
-    int targetNumber;
 
-    //xx * Constructor is automatically called when a GameConfig object is created.
-    // * It initializes the random target number for the game.
-    public GameConfig() {
-        Random random = new Random();
+class GuessValidator {
+    public static String validateGuess(int guess,int target)
+    {
+        if(guess==target)
+            return "correct";
+        else if(guess<target)
+        {
+            return low;
+        }
+        return high;
 
-        this.targetNumber = random.nextInt(MAX - MIN + 1) + MIN;
     }
 
-    public int getTargetNumber() {
-        return targetNumber;
     }
-
-    public int getMaxAttempts() {
-        return MAX_ATTEMPTS;
-    }
-
-    public int getMaxHints() {
-        return MAX_HINTS;
-    }
-
-    public void showRules() {
-        System.out.println("guess a number between "+ MIN+"  and"+" "+MAX);
-        System.out.println("you have attended "+MAX+" "+"attempts");
-        System.out.println("Hints will be provided after wrong guesses.\n");
-    }}
